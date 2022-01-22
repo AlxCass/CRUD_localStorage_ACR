@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { HLocaStorageUser } from '../helpers/HLocalStorageUser';
+import { IUser } from '../interfaces/IUser';
 
 @Component({
   selector: 'app-form',
@@ -10,26 +11,48 @@ import { HLocaStorageUser } from '../helpers/HLocalStorageUser';
 export class FormComponent implements OnInit {
   private static readonly MIN_LENGTH_FOR_NAME: number = 5;
   private static readonly MIN_LENGTH_FOR_DESCRIPTION: number = 5;
+  public users: Array<IUser>;
   public checkoutForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     name: ['', [Validators.required, Validators.minLength(FormComponent.MIN_LENGTH_FOR_NAME)]],
-    description:['', [Validators.required, Validators.minLength(FormComponent.MIN_LENGTH_FOR_DESCRIPTION)]],
-    phone:['', Validators.required],
+    description: ['', [Validators.required, Validators.minLength(FormComponent.MIN_LENGTH_FOR_DESCRIPTION)]],
+    phone: ['', Validators.required],
   });
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) {
+    this.users = new Array<IUser>();
+  }
 
   ngOnInit(): void {
   }
-  public validateForm(): void{
-    if(this.checkoutForm.valid){
-      HLocaStorageUser.add(this.checkoutForm.value);
+  /**
+     * actualizar, ejemplo
+     */
+    /*HLocaStorageUser.update({
+      idUser:1,
+      name: "Luis Armando Hernandez Vazquez",
+      email:"a25@gmail.com",
+      description:"this testing",
+      phone:"34939493493"
+    });*/
+  public showAllUsers(){
+
+    if(HLocaStorageUser.total() > HLocaStorageUser.NOTHING){
+      this.users = HLocaStorageUser.getUsers()!;
+    }else{
+      alert("No contienes usuarios registrados")
+    }
+  }
+  public addUser(){
+    HLocaStorageUser.add(this.checkoutForm.value);
+  }
+  public validateForm(): void {
+    if (this.checkoutForm.valid) {
+       this.addUser();
       alert("Se agrego un nuevo usuario")
       this.checkoutForm.reset();
     }
-
   }
-
 
 
 }

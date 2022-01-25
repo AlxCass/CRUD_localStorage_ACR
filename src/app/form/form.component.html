@@ -22,11 +22,36 @@
       <label *ngIf="checkoutForm.valid" class="text-success">El formulario es correcto</label>
       <label *ngIf="!checkoutForm.valid" class="text-danger">Error, formulario invalido</label>
     </div>
-    <button [disabled]="!checkoutForm.valid" (click)="validateForm()" type="button" class="btn btn-primary">Register</button>
+
   </form>
   <div class="container">
-    <button  (click)="showAllUsers()" type="button" class="btn btn-primary">Mostrar Usuarios</button>
-    <p *ngFor="let user of users">{{user.name}}</p>
+     <button [disabled]="!checkoutForm.valid" (click)="validateForm()" type="button" class="btn btn-secondary" id="actions">Register</button>&nbsp;&nbsp;
+    <button (click)="showAllUsers()" type="button" class="btn btn-primary" id="actions">Mostrar Usuarios</button>&nbsp;&nbsp;
 
+<br>
+<br>
+<br>
+   <table class="tbl" ng-show="tableVisibility">
+    <tr>
+      <th>#</th>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Description</th>
+
+      <th colspan="2">Operacion</th>
+
+    </tr>
+    <tr *ngFor="let user of users; let i = index">
+      <th scope="row">{{i+1}}</th>
+      <td>{{user.name}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.phone}}</td>
+      <td>{{user.description}}</td>
+
+      <td> <button (click)="editUser(user.idUser)" type="button" class="btn btn-warning">Editar</button></td>
+      <td> <button (click)="deletUser(user.idUser)" type="button" class="btn btn-danger">Eliminar</button></td>
+    </tr>
+  </table>
   </div>
 </div>

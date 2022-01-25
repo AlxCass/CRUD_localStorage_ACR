@@ -1,7 +1,9 @@
+import { IDBUser } from './../interfaces/IDbUser';
+import { IUser } from './../interfaces/IUser';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { HLocaStorageUser } from '../helpers/HLocalStorageUser';
-import { IUser } from '../interfaces/IUser';
+
 
 @Component({
   selector: 'app-form',
@@ -9,9 +11,11 @@ import { IUser } from '../interfaces/IUser';
   styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
+  IUser: IUser[] = [];
   private static readonly MIN_LENGTH_FOR_NAME: number = 5;
   private static readonly MIN_LENGTH_FOR_DESCRIPTION: number = 5;
   public users: Array<IUser>;
+
   public checkoutForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     name: ['', [Validators.required, Validators.minLength(FormComponent.MIN_LENGTH_FOR_NAME)]],
@@ -52,6 +56,22 @@ export class FormComponent implements OnInit {
       alert("Se agrego un nuevo usuario")
       this.checkoutForm.reset();
     }
+
+  }
+
+  public deletUser(IdUser: any){
+
+    if(HLocaStorageUser.total() > HLocaStorageUser.NOTHING){
+    this.users = HLocaStorageUser.delete(IdUser)!;
+    alert("Se borro el usuario")
+  }else{
+    alert("No se pudo borrar el registro")
+  }
+  }
+
+  public editUser(IdUser: any){
+
+    HLocaStorageUser.update(this.checkoutForm.value);
   }
 
 
